@@ -10,8 +10,7 @@ const knex = require('../knex');
 // Get All (and search by query)
 /* ========== GET/READ ALL NOTES ========== */
 router.get('/notes', (req, res, next) => {
-  const { searchTerm } = req.query;
-  const { folderId } = req.query;
+  const { searchTerm, folderId } = req.query;
   knex.select('notes.id', 'title', 'content', 'folders.id as folder_id', 'folders.name as folderName')
     .from('notes')
     .leftJoin('folders', 'notes.folder_id', 'folders.id')
