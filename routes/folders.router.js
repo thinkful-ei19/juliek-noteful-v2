@@ -96,16 +96,11 @@ router.post('/folders', (req, res, next) => {
 router.delete('/folders/:id', (req, res, next) => {
   const id = req.params.id;
 
-  knex.select('id', 'name')
+  knex.del()
     .from('folders')
     .where('id', id)
-    .del()
-    .then(result => {
-      if (result) {
-        res.status(204).end();
-      } else {
-        next();
-      }
+    .then(() => {
+      res.status(204).end();
     })
     .catch(next);
 });

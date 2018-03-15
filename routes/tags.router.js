@@ -13,44 +13,55 @@ router.get('/tags', (req, res, next) => {
     .catch(next);
 });
 
-// router.get('/tags:id', (req, res, next) => {
-//   const {id} = req.params;
-//   knex.select('id', 'name')
-//     .from('tags')
-//     .where('id', id)
-//     .then(([results]) => {
-//       if (results) {
-//         res.json(results);
-//       } else {
-//         next();
-//       }
-//     })
-//     .catch(err => next(err));
-// });
+router.get('/tags:id', (req, res, next) => {
+  const {id} = req.params;
+  knex.select('id', 'name')
+    .from('tags')
+    .where('id', id)
+    .then(([results]) => {
+      if (results) {
+        res.json(results);
+      } else {
+        next();
+      }
+    })
+    .catch(err => next(err));
+});
 
-// router.post('/tags', (req, res, next) => {
-//   const { name } = req.body;
+router.post('/tags', (req, res, next) => {
+  const { name } = req.body;
   
-//   /***** Never trust users. Validate input *****/
-//   if (!name) {
-//     const err = new Error('Missing `name` in request body');
-//     err.status = 400;
-//     return next(err);
-//   }
+  /***** Never trust users. Validate input *****/
+  if (!name) {
+    const err = new Error('Missing `name` in request body');
+    err.status = 400;
+    return next(err);
+  }
   
-//   const newItem = { name };
+  const newItem = { name };
   
-//   knex.insert(newItem)
-//     .into('tags')
-//     .returning(['id', 'name'])
-//     .then((results) => {
-//       // Uses Array index solution to get first item in results array
-//       const result = results[0];
-//       res.location(`${req.originalUrl}/${result.id}`).status(201).json(result);
-//     })
-//     .catch(err => next(err));
-// });
+  knex.insert(newItem)
+    .into('tags')
+    .returning(['id', 'name'])
+    .then((results) => {
+      // Uses Array index solution to get first item in results array
+      const result = results[0];
+      res.location(`${req.originalUrl}/${result.id}`).status(201).json(result);
+    })
+    .catch(err => next(err));
+});
 
+router.delete('/tags/:id', (req, res, next) => {
+  const id = req.params.id;
+
+  knex.del()
+    .from('tags')
+    .where('id', id)
+    .then(() => {
+      res.status(204).end();
+    })
+    .catch(next);
+});
 
 
 module.exports = router;

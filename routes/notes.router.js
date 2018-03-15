@@ -124,18 +124,13 @@ router.post('/notes', (req, res, next) => {
 router.delete('/notes/:id', (req, res, next) => {
   const id = req.params.id;
   
-  knex.select('id', 'title', 'content')
-    .from('notes')
+  knex.del()
+    .from('tags')
     .where('id', id)
-    .del()
-    .then(count => {
-      if (count) {
-        res.status(204).end();
-      } else {
-        next();
-      }
+    .then(() => {
+      res.status(204).end();
     })
-    .catch(err => next(err));
+    .catch(next);
 });
 
 module.exports = router;
