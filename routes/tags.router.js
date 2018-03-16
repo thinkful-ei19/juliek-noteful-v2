@@ -28,6 +28,18 @@ router.get('/tags:id', (req, res, next) => {
     .catch(err => next(err));
 });
 
+router.put('/tags/:id', (req, res, next) => {
+  const {name} = req.body;
+  const {id} = req.params;
+
+  if (!name) {
+    const err = new Error('Missing `name` in request body');
+    err.status = 400;
+    return next(err);
+  }
+
+  const updateObj = { name };
+  
 router.post('/tags', (req, res, next) => {
   const { name } = req.body;
   
